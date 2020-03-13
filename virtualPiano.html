@@ -19,10 +19,9 @@
 var g_instrument = 'Piano';
 
 
-
 function gasendevent(action,label) { return "ga('send', 'event', '" + g_instrument + "', '" + action + "', '" + label + "');"; }
 
-function evallog(gastring) { eval(gastring); console.log(gastring); }
+function evallog(gastring) { console.log(gastring); }
 
 function galog(action,label) { evallog(gasendevent(action,label)); }
 
@@ -1628,7 +1627,7 @@ function octavespanel(a,b)
 
  lob.setAttribute('onclick','loweroctave();');
 
- lob.innerHTML = 'add lower octave';
+ lob.innerHTML = 'thêm quãng trầm hơn';
 
  lob.style.cursor = 'pointer';
 
@@ -1648,7 +1647,7 @@ function octavespanel(a,b)
 
  rr.setAttribute('onclick','higheroctave();');
 
- rr.innerHTML = 'add higher octave';
+ rr.innerHTML = 'thêm quãng cao hơn';
 
  rr.style.cursor = 'pointer';
 
@@ -1668,7 +1667,7 @@ function octavespanel(a,b)
 
  rlo.setAttribute('onclick','removelowestoctave();');
 
- rlo.innerHTML = 'remove lowest octave';
+ rlo.innerHTML = 'xóa quãng trầm nhất';
 
  rlo.style.cursor = 'pointer';
 
@@ -1688,7 +1687,7 @@ function octavespanel(a,b)
 
  rho.setAttribute('onclick','removehighestoctave();');
 
- rho.innerHTML = 'remove highest octave';
+ rho.innerHTML = 'xóa quãng cao nhất';
 
  rho.style.cursor = 'pointer';
 
@@ -1855,6 +1854,25 @@ function meloga()
 }
 
 
+function layoutKeyboard() {
+	var lk = document.createElement('select');
+	lk.id = 'layoutskeyboard';
+	lk.style.margin = '0.5em';
+	var lko = document.createElement('option');
+	lko.text = 'bàn phím enter ngang';
+	lko.value = 1;
+	lk.add(lko);
+	lko = document.createElement('option');
+	lko.text = 'bàn phím enter chữ L';
+	lko.value = 2;
+	lk.add(lko);
+	lko = document.createElement('option');
+	lko.text = 'bàn phím enter L ngược';
+	lko.value = 3;
+	lk.add(lko);
+	return lk;
+}
+
 
 function sustainbox()
 
@@ -1872,7 +1890,7 @@ function sustainbox()
 
  aa.appendChild(ss);
 
- aa.innerHTML += 'sustain';
+ aa.innerHTML += 'vang âm';
 
  aa.style.padding = '0'; aa.style.margin = '0'; aa.style.border = 'none';
 
@@ -1912,7 +1930,7 @@ function panel(a,b)
 
   var opt = document.createElement('option');
 
-  opt.text = 'computer keyboard plays from ' + 'C'+i+' to C'+(i+2);
+  opt.text = 'bàn phím từ ' + 'C'+i+' đến C'+(i+2);
 
   se.add(opt);
 
@@ -1932,19 +1950,19 @@ function panel(a,b)
 
  var opt = document.createElement('option');
 
- opt.text = 'single notes';
+ opt.text = 'nốt đơn';
 
  melo.add(opt);
 
  opt = document.createElement('option');
 
- opt.text = 'major chords';
+ opt.text = 'hợp âm trưởng';
 
  melo.add(opt);
 
  opt = document.createElement('option');
 
- opt.text = 'minor chords';
+ opt.text = 'hợp âm thứ';
 
  melo.add(opt);
 
@@ -1958,7 +1976,7 @@ function panel(a,b)
 
  octavesbutton.className = 'przycisk';
 
- octavesbutton.innerHTML = 'octaves';
+ octavesbutton.innerHTML = 'quãng tám';
 
  octavesbutton.setAttribute('onclick','octavesPanel.style.display="block";');
 
@@ -2014,17 +2032,11 @@ function panel(a,b)
 
  div.appendChild(sustainbox());
 
- div.appendChild(advbox);
-
- div.appendChild(donate());  
+ div.appendChild(layoutKeyboard());
 
  div.appendChild(spot);
 
  div.appendChild(reklama);
-
- //div.appendChild(advancedpanel(a,b));
-
-  
 
  applynoselect(div);
 
@@ -2284,12 +2296,25 @@ function keydown(e)
 
  if (k==221) press(22); //]
 
- if (k==8) { press(23); return false; } //backspace
+	var idLayKey = document.getElementById('layoutskeyboard');
 
- if (k==13 || k==46) press(25); //enter
+	if (k==8) { //backspace
+		if (idLayKey.value == 2) {
+			press(25);
+		} else press(23);
+		return false;
+	}
 
- if (k==220) press(24); //\
+	if (k==13 || k==46){ //enter
+		if (idLayKey.value == 1 || k == 46) press(25);
+		else press(24);
+	}
 
+	if (k==220){ //\
+		if (idLayKey.value == 1) press(24);
+		else if (idLayKey.value == 2) press(23);
+		else press(25);
+	}
 
 
  if (k==20) { press(1); press(5); press(8); press(13); } //caps
@@ -2414,11 +2439,25 @@ function keyup(e)
 
  if (k==221) unpress(22); //]
 
- if (k==8) { unpress(23); return false; } //backspace
+	var idLayKey = document.getElementById('layoutskeyboard');
 
- if (k==13 || k==46) unpress(25); //enter
+	if (k==8) { //backspace
+		if (idLayKey.value == 2) {
+			unpress(25);
+		} else unpress(23);
+		return false;
+	}
 
- if (k==220) unpress(24); //\
+	if (k==13 || k==46){ //enter
+		if (idLayKey.value == 1 || k == 46) unpress(25);
+		else unpress(24);
+	}
+
+	if (k==220){ //\
+		if (idLayKey.value == 1) unpress(24);
+		else if (idLayKey.value == 2) unpress(23);
+		else unpress(25);
+	}
 
 
 
@@ -3602,9 +3641,6 @@ body { margin-bottom:1em; font-family: Verdana; }
 
 #struktura td { vertical-align: top; padding-left: 1em; padding-right: 1em; }
 
-#lewakolumna { }
-
-#prawakolumna { width: 300px; }
 
 #skyscraper { overflow: hidden; max-width: 300px; box-shadow: 0 0 1em 0.5em #bbbbbb; background-color: #bbbbbb; margin-top: 0; }
 
@@ -3652,25 +3688,19 @@ main h2 { font-family: "Times New Roman"; }
 
 <div id='strukturacontainer'><table id='struktura'><tr><td id='lewakolumna'>
 
-<nav>
-
-<a href="//www.apronus.com">Home</a>
-
-</nav>
-
 <header>
 
-<h1>Virtual Piano Online</h1>
+<h1>Giả lập Piano bởi Trần Đức Bình</h1>
 
-Our virtual piano is an online piano keyboard simulator whose piano keyboard has 85 piano keys.
+Giả lập của chúng tôi có thể giả lập lên đến 85 phím.
 
-<button onclick='moretext.style.display="inline";this.style.display="none";'>read more</button>
+<button onclick='moretext.style.display="inline";this.style.display="none";'>đọc thêm</button>
 
 <div id='moretext' style='display:none;'>
 
-<p>More precisely, our online piano keyboard has seven octaves each with 12 piano keys which totals 84 piano keys but the rightmost piano key is a C8 which belongs to a still higher octave. The piano keys on our online piano keyboard can be played by clicking the keys with the mouse or by touching the piano keys on a touch screen or by pressing computer keyboard keys.</p>
+<p>Chính xác hơn, bàn phím piano của chúng tôi có 7 quãng tám, mỗi phím có 12 phím đàn piano, tổng cộng có 84 phím, nhưng phím C8 ngoài cùng bên phải thuộc về quãng còn cao hơn nữa. Bạn có thể chơi các phím piano của chúng tôi bằng chuột, cảm ứng nhấn vào phím đàn hoặc dùng bàn phím máy tính.</p>
 
-<p>Most importantly, our virtual piano simulator can be played online in a similar way that a physical piano keyboard is played because the layout of the piano keys on a physical keyboard is matched exactly to the layout of our virtual piano keyboard simulated by the computer keyboard. In particular, the white piano keys are played by pressing the computer keyboard keys in the Tab,Q,W,E,R,T,Y row while the black piano keys which are placed between their respective white piano keys are played by the computer keyboard keys in the 2,3,4,5,6 row, which mirrors the layout of the real piano keybaord where black piano keys are squeezed between white piano keys and placed slightly higher. This unique feature of our virtual piano keyboard simulator lets you play piano online by using your computer keyboard as a virtualpiano keyboard.</p>
+<p>Điều quan trọng nhất là trình giả lập piano ảo của chúng tôi có thể chơi theo cách tương tự như phím piano thật. Cụ thể, các phím trắng được là các phím Q,W,E,... khi các phím đen là 1,2,... được mô phổng phím đen cao hơn trắng giống với đàn thật. Tính năng này sẽ giúp cho bạn có thể chơi đàn piano ngay trên máy tính của mình.</p>
 
 </div>
 
@@ -3680,27 +3710,8 @@ Our virtual piano is an online piano keyboard simulator whose piano keyboard has
 
  <div id='pianolessadvanced'></div>
 
- <div id='cookies'>We use Google cookies to analyze traffic and to personalize ads for non-EU users.</div>
+  <div id='reklama1' onmouseenter='detectad(1);'>
 
- <div id='reklama1' onmouseenter='detectad(1);'>
-
-  <!-- piano-2016-10-03 -->
-
-  <ins class='adsbygoogle'
-
-       style='display:block'
-
-       data-ad-client='ca-pub-5700139411406455'
-
-       data-ad-slot='8676335215'
-
-       data-ad-format='auto'></ins>
-
-  <script>
-
-  (adsbygoogle = window.adsbygoogle || []).push({});
-
-  </script>
 
  </div>
 
@@ -3708,140 +3719,12 @@ Our virtual piano is an online piano keyboard simulator whose piano keyboard has
 
 </td> <!-- lewakolumna -->
 
-<td id='prawakolumna' onmouseenter='detectad(3);'><div id='skyscraper'>
-
-
-
-<!-- piano-2017-02-23-skyscraper -->
-
-<ins class='adsbygoogle'
-
-     style='display:inline-block;width:300px;height:600px'
-
-     data-ad-client='ca-pub-5700139411406455'
-
-     data-ad-slot='5497778810'></ins>
-
-<script>
-
-(adsbygoogle = window.adsbygoogle || []).push({});
-
-</script>
-
-
-
 </div></td>
 
-</tr></table></div><!--strukturacontainer-->
-
-
-
-<main>
-
-
-
-<h2>Use the computer keyboard to play the virtual piano keyboard</h2>
-
-
-
-<p>Press keys on the computer keyboard or click on the keys of the piano keyboard
-
-to play this virtual online piano simulator.
-
-Each key on the piano keyboard from C<sub>3</sub> to C<sub>5</sub> can be played by pressing an associated key on the computer keyboard.
-
-For example, C<sub>3</sub> is played by pressing Tab while C#<sub>3</sub> is played by pressing 1 and D<sub>3</sub> is played by pressing Q and so on.
-
-Note that B<sub>4</sub> is played by pressing the backslash key, while the Enter key plays C<sub>5</sub>.
-
-</p>
-
-
-
-<h2>Play any chords with the computer keyboard</h2>
-
-<p>
-
-The keys from the row A,S,D and the row Z,X,C are programmed to play white key chords for rich melodies.
-
-Moreover, with advanced options you can assign any user-defined chord or single note to any key of the computer keyboard.
-
-Tick the CHORD checkbox to indicate a chord on the piano keyboard and then check it off to create a custom-made chord button.
-
-This button will play your chord but it can also be configured to be associated with a computer keyboard key. 
-
-</p>
-
-
-
-<h2>Record and playback</h2>
-
-<p>
-
-You can <em>record anything played by this virtual piano keyboard and play it back</em> at will.
-
-To start and stop recording check and uncheck the box RECORD. A playback button will appear automatically.
-
-You can have many playback buttons: each with its own recording. You can even play back more than one recording at the same time while making another recording to combine them.
-
-</p>
-
-
-
-<h2>Save your work</h2>
-
-<p>
-
-Your recordings and your custom chords are stored as buttons which can be dragged around to shift position.
-
-You can <i>save</i> all your buttons as a text file to your hard drive and then <i>load</i> this file later.
-
-Each button can be renamed and configured to be triggered by any key from the computer keyboard.
-
-You can program your computer keyboard so that each key plays a custom chord or a playback recording and then save the layout for later.
-
-</p>
-
-
-
-<h2>Feedback is welcome</h2>
-
-<p>
-
-We have the ambition to make it the most useful virtual piano keyboard online simulator in the world so we need to know what exactly our users expect when they play it.
-
-Please feel free to write any comments and remarks by using the email address displayed on the
-
-<a href='//www.apronus.com/'>Apronus.com homepage</a>.
-
-</p>
-
-
-
-<p>You might also be interested in our <a href="//www.apronus.com/music/onlineguitar.htm">virtual guitar</a>
-
-that plays all the major chords, minor chords, and dominant sevenths chords.</p>
-
-
-
-</main>
-
-
+</tr></table></div>
 
 <aside style='font-family: Arial; font-size: small; text-align: center; margin-top: 2em;'>
-
-<div lang='ru' style='display: inline-block; background-color: rgb(240,240,240); box-shadow: 0 0 0.5em 0.5em rgb(240,240,240);'>
-
-<a href='https://online-pianino.ru/' lang='ru' style='text-transform:uppercase; text-decoration: none;'>пианино онлайн</a>
-
-</div> |
-
-<div lang='es' style='display: inline-block; background-color: rgb(240,240,240); box-shadow: 0 0 0.5em 0.5em rgb(240,240,240);'>
-
-<a href='https://teclado-pianovirtual.online/' lang='es' style='text-transform:uppercase; text-decoration: none;'>piano virtual (piano online)</a>
-
-</div>
-
+	Công cụ chơi đàn piano này được viết bởi Trần Đức Bình.
 </aside>
 
 
@@ -3853,25 +3736,6 @@ pianolessadvanced.appendChild(panel(3,4));
 pianoessence.appendChild(advancedpanel(3,4));
 
 markQWE();
-
-
-
-function refreshads()
-
-{
-
- var containerwidth = document.getElementById('strukturacontainer').clientWidth;
-
- prawakolumna.style.display = (containerwidth < 1000) ? 'none' : 'initial';
-
-}
-
-
-
-refreshads();
-
-document.body.onresize = refreshads;
-
 
 
 function readquery()
@@ -3924,8 +3788,38 @@ function readquery()
 
 readquery();
 
-
-
+document.getElementById('susbox').checked = false;
+var octSel = document.getElementById('octaveselector');
+var meloChord = document.getElementById('melochords');
+var eChanged = new Event('change');
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') {
+		if (octSel.selectedIndex > 5) octSel.selectedIndex = 5;
+		else if (octSel.selectedIndex < 5) octSel.selectedIndex++;
+		octSel.dispatchEvent(eChanged);
+    }
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') {
+		if (octSel.selectedIndex < 0) octSel.selectedIndex = 0;
+		else if (octSel.selectedIndex > 0) octSel.selectedIndex--;
+		octSel.dispatchEvent(eChanged);
+    }
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowUp') {
+		if (meloChord.selectedIndex < 0) meloChord.selectedIndex = 0;
+		else if (meloChord.selectedIndex > 0) meloChord.selectedIndex--;
+		meloChord.dispatchEvent(eChanged);
+    }
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') {
+		if (meloChord.selectedIndex > 2) meloChord.selectedIndex = 2;
+		else if (meloChord.selectedIndex < 2) meloChord.selectedIndex++;
+		meloChord.dispatchEvent(eChanged);
+    }
+});
 </script>
 
 
