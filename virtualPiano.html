@@ -3774,6 +3774,7 @@ document.addEventListener('keydown', function (e) {
 		if (octSel.selectedIndex > 5) octSel.selectedIndex = 5;
 		else if (octSel.selectedIndex < 5) octSel.selectedIndex++;
 		octSel.dispatchEvent(eChanged);
+    releaseallkeys();
     }
 });
 document.addEventListener('keydown', function (e) {
@@ -3781,6 +3782,7 @@ document.addEventListener('keydown', function (e) {
 		if (octSel.selectedIndex < 0) octSel.selectedIndex = 0;
 		else if (octSel.selectedIndex > 0) octSel.selectedIndex--;
 		octSel.dispatchEvent(eChanged);
+    releaseallkeys();
     }
 });
 document.addEventListener('keydown', function (e) {
@@ -3788,6 +3790,7 @@ document.addEventListener('keydown', function (e) {
 		if (meloChord.selectedIndex < 0) meloChord.selectedIndex = 0;
 		else if (meloChord.selectedIndex > 0) meloChord.selectedIndex--;
 		meloChord.dispatchEvent(eChanged);
+    releaseallkeys();
     }
 });
 document.addEventListener('keydown', function (e) {
@@ -3795,6 +3798,7 @@ document.addEventListener('keydown', function (e) {
 		if (meloChord.selectedIndex > 2) meloChord.selectedIndex = 2;
 		else if (meloChord.selectedIndex < 2) meloChord.selectedIndex++;
 		meloChord.dispatchEvent(eChanged);
+    releaseallkeys();
     }
 });
 	loweroctave();
