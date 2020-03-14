@@ -18,6 +18,10 @@
 
 var g_instrument = 'Piano';
 
+var keyDowned = [];
+for (var i = 0; i < 256; i++) {
+	keyDowned[i] = 0;
+}
 
 function gasendevent(action,label) { return "ga('send', 'event', '" + g_instrument + "', '" + action + "', '" + label + "');"; }
 
@@ -341,7 +345,6 @@ function keywrite(n)
 
  var div = document.createElement('div');
 
- div.style.fontFamily = 'Arial';
 
  div.innerHTML =
 
@@ -393,7 +396,7 @@ function buttonpianostyle()
 
  text += " background: linear-gradient(#eeeeee, #cccccc);";
 
- text += " height: 2em; font-weight: bold; font-family: Verdana;";
+ text += " height: 2em; font-weight: bold;";
 
  text += " border: 1px solid darkgray; border-radius: 0.5em;";
 
@@ -407,7 +410,7 @@ function buttonpianostyle()
 
  text += " background: linear-gradient(#fafafa, #dddddd);";
 
- text += " height: 2em; font-family: Arial;";
+ text += " height: 2em;";
 
  text += " border: 1px solid darkgray; border-radius: 0.5em;";
 
@@ -434,8 +437,6 @@ function buttonpianostyle()
  text += " border-radius: 4px;";
 
  text += " background: #eeeeee;";
-
- text += " font-family: Arial;";
 
  text += " font-size: 100%;"
 
@@ -2246,11 +2247,11 @@ function keydown(e)
 
  if (!userkeydownup(k,'down')) return false;
 
- 
+ if (keyDowned[k] == 1) return false;
 
  gakeypress(k);
 
- 
+ keyDowned[k] = 1;
 
  if (k==9)  { press(1); return false; } //tab
 
@@ -2308,6 +2309,7 @@ function keydown(e)
 	if (k==13 || k==46){ //enter
 		if (idLayKey.value == 1 || k == 46) press(25);
 		else press(24);
+		return false;
 	}
 
 	if (k==220){ //\
@@ -2393,6 +2395,8 @@ function keyup(e)
 
  var k = e.keyCode;
 
+ keyDowned[k] = 0;
+
   if (!userkeydownup(k,'up')) return false;
 
  if (k==9)  { unpress(1); return false; } //tab
@@ -2451,6 +2455,7 @@ function keyup(e)
 	if (k==13 || k==46){ //enter
 		if (idLayKey.value == 1 || k == 46) unpress(25);
 		else unpress(24);
+		return false;
 	}
 
 	if (k==220){ //\
@@ -3322,33 +3327,6 @@ function detectad(n)
 }
 
 
-
-function donate()
-
-{
-
- var button = document.createElement('button');
-
- button.id = 'donatebutton';
-
- button.className = 'przycisk';
-
- button.style.display = 'none';
-
- button.innerHTML = 'donate';
-
- var href = "htt" + "ps:/" + "/ww" + "w.paypal" + ".com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=USFQTTFZ7WYJ4";
-
- var onclick = 'window.open("'+href+'");';
-
- button.setAttribute('onclick',onclick);
-
- return button;
-
-}
-
-
-
 function updatepianoessencewidth()
 
 {
@@ -3633,7 +3611,7 @@ function custommemorychordbutton(keys,name,keycode)
 
 <style>
 
-body { margin-bottom:1em; font-family: Verdana; }
+body { margin-bottom:1em; background: black; color: white;}
 
 
 
@@ -3648,21 +3626,19 @@ body { margin-bottom:1em; font-family: Verdana; }
 
 nav { float: left; margin:0; margin-right: 2em; }
 
-nav a { white-space: nowrap; font-family: Verdana; }
+nav a { white-space: nowrap; }
 
-header { margin:0; text-align: left; font-family: Arial; line-height: 1.2;  }
+header { margin:0; text-align: left; line-height: 1.2;  }
 
-header h1 { margin:0;  color: #555555; font-size: 120%; margin-bottom: 0.5em; }
+header h1 { margin:0; font-size: 120%; margin-bottom: 0.5em; }
 
 header h2 { margin-top:0; margin-bottom:0; font-weight:bold; font-size: 120%; color: #777777; }
 
 
 
-#pianoessence { }
-
 #pianolessadvanced { max-width: 732px; margin-left: auto; margin-right: auto; }
 
-#cookies { color: #444444; text-align: center; margin-top: 2em; margin-left: auto; margin-right: auto; margin-bottom: 1em; font-family: Arial; }
+#cookies { color: #444444; text-align: center; margin-top: 2em; margin-left: auto; margin-right: auto; margin-bottom: 1em; }
 
 #reklama1 { max-width: 732px; margin-top: 0; margin-bottom: 1em; margin-left: auto; margin-right: auto; }
 
@@ -3672,10 +3648,11 @@ header h2 { margin-top:0; margin-bottom:0; font-weight:bold; font-size: 120%; co
 
 
 
-main { font-family: Verdana; margin-left: 10%; margin-right: 10%; }
+main { margin-left: 10%; margin-right: 10%; }
 
-main h2 { font-family: "Times New Roman"; }
 
+#pianokeyboardpanel { text-align: center;}
+#keyboardspot {background: white;}
 
 
 </style>
@@ -3723,7 +3700,7 @@ Giả lập của chúng tôi có thể giả lập lên đến 85 phím.
 
 </tr></table></div>
 
-<aside style='font-family: Arial; font-size: small; text-align: center; margin-top: 2em;'>
+<aside style='font-size: small; text-align: center; margin-top: 2em;'>
 	Công cụ chơi đàn piano này được viết bởi Trần Đức Bình.
 </aside>
 
@@ -3820,6 +3797,11 @@ document.addEventListener('keydown', function (e) {
 		meloChord.dispatchEvent(eChanged);
     }
 });
+	loweroctave();
+	loweroctave();
+	higheroctave();
+	higheroctave();
+	higheroctave();
 </script>
 
 
