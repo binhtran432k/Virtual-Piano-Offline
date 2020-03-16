@@ -1864,11 +1864,11 @@ function layoutKeyboard() {
 	lko.value = 1;
 	lk.add(lko);
 	lko = document.createElement('option');
-	lko.text = 'bàn phím enter chữ L';
+	lko.text = 'bàn phím enter chữ J';
 	lko.value = 2;
 	lk.add(lko);
 	lko = document.createElement('option');
-	lko.text = 'bàn phím enter L ngược';
+	lko.text = 'bàn phím enter J ngược';
 	lko.value = 3;
 	lk.add(lko);
 	return lk;
@@ -2318,6 +2318,32 @@ function keydown(e)
 		else press(25);
 	}
 
+  if (k==45){
+    press(26);
+    return false;
+  }
+
+  if (k==35){
+    press(27);
+    return false;
+  }
+
+  if (k==36){
+    press(28);
+    return false;
+  }
+
+  if (k==34){
+    press(29);
+    return false;
+  }
+
+  if (k==103){
+    press(30);
+    return false;
+  }
+
+
 
  if (k==20) { press(1); press(5); press(8); press(13); } //caps
 
@@ -2463,6 +2489,31 @@ function keyup(e)
 		else if (idLayKey.value == 2) unpress(23);
 		else unpress(25);
 	}
+
+  if (k==45){
+    unpress(26);
+    return false;
+  }
+
+  if (k==35){
+    unpress(27);
+    return false;
+  }
+
+  if (k==36){
+    unpress(28);
+    return false;
+  }
+
+  if (k==34){
+    unpress(29);
+    return false;
+  }
+
+  if (k==103){
+    unpress(30);
+    return false;
+  }
 
 
 
